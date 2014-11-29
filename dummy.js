@@ -1,8 +1,3 @@
-/* Return a random ObjectId from a specified collection.
- * For populating fields in discrete collections where
- * the schema requires relations.
- */
-
 function getIds(collection) {
   var xs = [];
   db[collection]
@@ -14,6 +9,10 @@ function getIds(collection) {
   return xs;
 }
 
+/* Return a random ObjectId from a specified collection.
+ * For populating fields in discrete collections where
+ * the schema requires relations.
+ */
 function randomId(collection) {
   var length = db[collection].count();
   var ids = getIds(collection);
@@ -21,4 +20,11 @@ function randomId(collection) {
     var index = Math.floor(Math.random()*length);
     return ids[index];
   }
+}
+
+function stringToDate(collection, field) {
+  db[collection].find().forEach(function(doc) {
+    doc[field] = new Date(doc[field]);
+    db[collection].save(doc);
+  });
 }
